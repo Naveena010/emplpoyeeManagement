@@ -1,13 +1,55 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg:         #f7f5f0;
+  --surface:    #ffffff;
+  --surface2:   #f2efe9;
+  --surface3:   #e8e4db;
+  --border:     #e0dbd0;
+  --border2:    #c8c2b4;
+  --accent:     #2d6a4f;
+  --accent-lt:  #d8f3dc;
+  --accent-dim: #e8f5e9;
+  --blue:       #1a56db;
+  --blue-lt:    #dbeafe;
+  --red:        #e02424;
+  --red-lt:     #fde8e8;
+  --amber:      #c27803;
+  --amber-lt:   #fef3c7;
+  --text:       #1a1a2e;
+  --text2:      #4a5568;
+  --text3:      #9aa5b4;
+  --radius:     10px;
+  --radius-lg:  16px;
+  --font-head:  'Syne', sans-serif;
+  --font-body:  'Outfit', sans-serif;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg:  0 10px 30px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.05);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+input, select, button, textarea { font-family: var(--font-body); }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--surface2); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
 }
