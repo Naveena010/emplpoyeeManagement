@@ -27,7 +27,7 @@ public class AuthController {
     private final PasswordEncoder       encoder;
     private final AuditLogRepository    auditRepo;
 
-    // ── Register ──────────────────────────────────────────────────────────────
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AuthRequestDTO req) {
         String role = req.getRole() != null ? req.getRole() : "ROLE_USER";
@@ -54,7 +54,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 
-    // ── Login ─────────────────────────────────────────────────────────────────
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO req) {
         var auth = authManager.authenticate(
@@ -75,7 +75,7 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponseDTO(token, user.getUsername(), role));
     }
 
-    // ── Helper ────────────────────────────────────────────────────────────────
+
     private void saveAudit(Long empId, String username, String role,
                            String action, String request, String response, String remarks) {
         AuditLog log = new AuditLog();

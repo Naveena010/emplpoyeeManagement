@@ -26,7 +26,7 @@ public class EmployeeConsumer {
             log.setEmployeeId(((Number) event.get("employeeId")).longValue());
             log.setAction((String) event.get("action"));
             log.setSource("JMS");
-            log.setRequest(msg);                          // raw JMS message as request
+            log.setRequest(msg);
             log.setResponse("Event consumed successfully");
             log.setTimestamp(LocalDateTime.now());
             log.setRemarks("Received from employee.events queue");

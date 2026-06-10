@@ -13,18 +13,18 @@ public class AuditLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long   employeeId;   // null for auth events
-    private String username;     // who performed the action
-    private String role;         // their role
-    private String action;       // CREATE / UPDATE / DELETE / REGISTER / LOGIN
-    private String source;       // REST / JMS
+    private Long   employeeId;
+    private String username;
+    private String role;
+    private String action;
+    private String source;
 
     @Column(columnDefinition = "TEXT")
-    private String request;      // what was sent
+    private String request;
 
     @Column(columnDefinition = "TEXT")
-    private String response;     // what was returned
+    private String response;
 
-    private String remarks;      // short description
+    private String remarks;
     private LocalDateTime timestamp;
 }
