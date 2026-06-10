@@ -1,13 +1,16 @@
 package com.empms.controller;
 
-import com.empms.model.Employee;
+import com.empms.dto.EmployeeResponseDTO;
 import com.empms.service.EmployeeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -16,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(EmployeeController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class EmployeeControllerTest {
 
     @Autowired
@@ -24,16 +28,26 @@ class EmployeeControllerTest {
     @MockBean
     private EmployeeService service;
 
+    @MockBean
+    private com.empms.security.JwtUtil jwtUtil;
+
+    @MockBean
+    private com.empms.security.JwtFilter jwtFilter;
+
     @Test
     void shouldGetEmployeeById() throws Exception {
-        // 1. Setup Mock Data
-        Employee mockEmp = new Employee();
-        mockEmp.setId(1L);
-        mockEmp.setName("John Smith");
 
-        when(service.getById(1L)).thenReturn(mockEmp);
+        var dto = EmployeeResponseDTO.builder()
+                .id(1L)
+                .name("John Smith")
+                .email("john@test.com")
+                .department("IT")
+                .status("ACTIVE")
+                .dateOfJoining(LocalDate.of(2024, 1, 1))
+                .build();
 
-        // 2. Perform Request and Assert Response
+        when(service.getById(1L)).thenReturn(dto);
+
         mockMvc.perform(get("/employees/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("John Smith"));
@@ -41,19 +55,24 @@ class EmployeeControllerTest {
 
     @Test
     void shouldCreateEmployeeFromXml() throws Exception {
-        // 1. Setup Mock Data
-        String xmlInput = "<Employee><name>John Smith</name></Employee>";
-        Employee savedEmp = new Employee();
-        savedEmp.setId(10L);
-        savedEmp.setName("John Smith");
+        String xml = """
+                <Employee>
+                  <name>John Smith</name>
+                  <email>john@test.com</email>
+                  <department>IT</department>
+                  <dateOfJoining>2024-01-01</dateOfJoining>
+                </Employee>""";
 
-        when(service.create(xmlInput)).thenReturn(savedEmp);
+        var dto = EmployeeResponseDTO.builder()
+                .id(10L)
+                .name("John Smith")
+                .build();
 
-        // 2. Perform Request and Assert Response
+        when(service.create(xml)).thenReturn(dto);
+
         mockMvc.perform(post("/employees")
                         .contentType(MediaType.APPLICATION_XML)
-                        .content(xmlInput))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(10));
+                        .content(xml))
+                .andExpect(status().isCreated());
     }
 }

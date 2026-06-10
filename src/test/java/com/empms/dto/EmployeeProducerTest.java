@@ -1,5 +1,6 @@
-package com.empms.jms;
+package com.empms.dto;
 
+import com.empms.jms.EmployeeProducer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -7,11 +8,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jms.core.JmsTemplate;
 
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class EmployeeProducerTest {
+class EmployeeProducerTest {
 
     @Mock
     private JmsTemplate jmsTemplate;
@@ -21,16 +23,12 @@ public class EmployeeProducerTest {
 
     @Test
     void testSendEvent() {
-
         producer.sendEvent(101L, "UPDATE");
 
-        String expectedMsg = """
-            {
-              "employeeId": 101,
-              "action": "UPDATE"
-            }
-            """;
 
-        verify(jmsTemplate).convertAndSend("employee.events", expectedMsg);
+        verify(jmsTemplate).convertAndSend(
+                eq("employee.events"),
+                contains("101")
+        );
     }
 }

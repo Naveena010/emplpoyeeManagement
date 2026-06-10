@@ -1,41 +1,44 @@
 package com.empms.controller;
 
-import com.empms.model.Employee;
+import com.empms.dto.*;
 import com.empms.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/employees")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService service;
+    private final EmployeeService service;
 
-    @PostMapping(consumes = "application/xml")
-    public Employee create(@RequestBody String xml) {
-        return service.create(xml);
+    @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<EmployeeResponseDTO> create(@RequestBody String xml) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(xml));
     }
 
     @PutMapping("/{id}")
-    public Employee update(@PathVariable Long id, @RequestBody Employee emp) {
-        return service.update(id, emp);
+    public ResponseEntity<EmployeeResponseDTO> update(@PathVariable Long id,
+                                                      @RequestBody EmployeeRequestDTO dto) {
+        return ResponseEntity.ok(service.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
-    public Employee getById(@PathVariable Long id) {
-        return service.getById(id);
+    public ResponseEntity<EmployeeResponseDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getById(id));
     }
 
     @GetMapping
-    public List<Employee> getAll() {
-        return service.getAll();
+    public ResponseEntity<List<EmployeeResponseDTO>> getAll() {
+        return ResponseEntity.ok(service.getAll());
     }
 }
